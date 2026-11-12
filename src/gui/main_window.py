@@ -7,21 +7,9 @@ from PySide6.QtWidgets import (
     QLabel
 )
 
+from gui.configuration_tab import ConfigurationTab
+
 import sys
-
-
-class ConfigurationTab(QWidget):
-
-    def __init__(self):
-        super().__init__()
-
-        layout = QVBoxLayout()
-
-        layout.addWidget(
-            QLabel("Configuration Tab")
-        )
-
-        self.setLayout(layout)
 
 
 class AnalysisTab(QWidget):
@@ -72,17 +60,11 @@ class MainWindow(QMainWindow):
 
         self.tabs = QTabWidget()
 
-        self.configuration_tab = (
-            ConfigurationTab()
-        )
+        self.configuration_tab = ConfigurationTab()
 
-        self.analysis_tab = (
-            AnalysisTab()
-        )
+        self.analysis_tab = AnalysisTab()
 
-        self.animation_tab = (
-            AnimationTab()
-        )
+        self.animation_tab = AnimationTab()
 
         self.tabs.addTab(
             self.configuration_tab,

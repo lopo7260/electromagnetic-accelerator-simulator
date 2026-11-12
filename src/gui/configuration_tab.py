@@ -9,13 +9,18 @@ from PySide6.QtWidgets import (
     QGroupBox
 )
 
+from config.module_config import ModuleConfig
+
 
 class ConfigurationTab(QWidget):
 
     def __init__(self):
         super().__init__()
 
+        self.modules = []
+
         self.setup_ui()
+        self.setup_connections()
 
     def setup_ui(self):
 
@@ -33,7 +38,21 @@ class ConfigurationTab(QWidget):
             self.build_simulation_panel()
         )
 
+        main_layout.setStretch(0, 1)
+        main_layout.setStretch(1, 2)
+        main_layout.setStretch(2, 1)
+
         self.setLayout(main_layout)
+
+    def setup_connections(self):
+
+        self.add_button.clicked.connect(
+            self.add_module
+        )
+
+        self.module_list.currentRowChanged.connect(
+            self.load_module
+        )
 
     def build_module_panel(self):
 
@@ -192,3 +211,80 @@ class ConfigurationTab(QWidget):
         box.setLayout(form)
 
         return box
+
+    def add_module(self):
+
+        module_number = len(
+            self.modules
+        ) + 1
+
+        module = ModuleConfig(
+
+            name=f"Module {module_number}",
+
+            z_min=0.0,
+            z_max=1.0,
+
+            Ex="0",
+            Ey="0",
+            Ez="0",
+
+            Bx="0",
+            By="0",
+            Bz="0"
+        )
+
+        self.modules.append(
+            module
+        )
+
+        self.module_list.addItem(
+            module.name
+        )
+
+        self.module_list.setCurrentRow(
+            len(self.modules) - 1
+        )
+
+    def load_module(self, index):
+
+        if index < 0:
+            return
+
+        module = self.modules[index]
+
+        self.name_edit.setText(
+            module.name
+        )
+
+        self.z_min_edit.setText(
+            str(module.z_min)
+        )
+
+        self.z_max_edit.setText(
+            str(module.z_max)
+        )
+
+        self.ex_edit.setText(
+            module.Ex
+        )
+
+        self.ey_edit.setText(
+            module.Ey
+        )
+
+        self.ez_edit.setText(
+            module.Ez
+        )
+
+        self.bx_edit.setText(
+            module.Bx
+        )
+
+        self.by_edit.setText(
+            module.By
+        )
+
+        self.bz_edit.setText(
+            module.Bz
+        )
