@@ -6,10 +6,12 @@ from PySide6.QtWidgets import (
     QListWidget,
     QPushButton,
     QLineEdit,
-    QGroupBox
+    QGroupBox,
+    QMessageBox
 )
 
 from config.module_config import ModuleConfig
+from config.simulation_config import SimulationConfig
 
 
 class ConfigurationTab(QWidget):
@@ -50,9 +52,39 @@ class ConfigurationTab(QWidget):
             self.add_module
         )
 
+        self.remove_button.clicked.connect(
+            self.remove_module
+        )
+
         self.module_list.currentRowChanged.connect(
             self.load_module
         )
+
+        self.run_button.clicked.connect(
+            self.build_simulation_config
+        )
+
+        editors = [
+
+            self.name_edit,
+
+            self.z_min_edit,
+            self.z_max_edit,
+
+            self.ex_edit,
+            self.ey_edit,
+            self.ez_edit,
+
+            self.bx_edit,
+            self.by_edit,
+            self.bz_edit
+        ]
+
+        for editor in editors:
+
+            editor.editingFinished.connect(
+                self.save_module
+            )
 
     def build_module_panel(self):
 
@@ -107,10 +139,7 @@ class ConfigurationTab(QWidget):
         self.by_edit = QLineEdit()
         self.bz_edit = QLineEdit()
 
-        form.addRow(
-            "Name",
-            self.name_edit
-        )
+        form.addRow("Name", self.name_edit)
 
         form.addRow(
             "z min",
@@ -214,9 +243,9 @@ class ConfigurationTab(QWidget):
 
     def add_module(self):
 
-        module_number = len(
-            self.modules
-        ) + 1
+        module_number = (
+            len(self.modules) + 1
+        )
 
         module = ModuleConfig(
 
@@ -288,3 +317,134 @@ class ConfigurationTab(QWidget):
         self.bz_edit.setText(
             module.Bz
         )
+
+    def save_module(self):
+
+        index = self.module_list.currentRow()
+
+        if index < 0:
+            return
+
+        module = self.modules[index]
+
+        try:
+
+            module.name = (
+                self.name_edit.text()
+            )
+
+            module.z_min = float(
+                self.z_min_edit.text()
+            )
+
+            module.z_max = float(
+                self.z_max_edit.text()
+            )
+
+            module.Ex = self.ex_edit.text()
+            module.Ey = self.ey_edit.text()
+            module.Ez = self.ez_edit.text()
+
+            module.Bx = self.bx_edit.text()
+            module.By = self.by_edit.text()
+            module.Bz = self.bz_edit.text()
+
+            self.module_list.item(
+                index
+            ).setText(
+                module.name
+            )
+
+        except ValueError:
+            pass
+
+    def remove_module(self):
+
+        index = self.module_list.currentRow()
+
+        if index < 0:
+            return
+
+        del self.modules[index]
+
+        self.module_list.takeItem(
+            index
+        )
+
+        if self.modules:
+
+            self.module_list.setCurrentRow(
+                0
+            )
+
+        else:
+
+            self.clear_editor()
+
+    def clear_editor(self):
+
+        self.name_edit.clear()
+
+        self.z_min_edit.clear()
+        self.z_max_edit.clear()
+
+        self.ex_edit.clear()
+        self.ey_edit.clear()
+        self.ez_edit.clear()
+
+        self.bx_edit.clear()
+        self.by_edit.clear()
+        self.bz_edit.clear()
+
+    def build_simulation_config(self):
+
+        try:
+
+            self.save_module()
+
+            config = SimulationConfig(
+
+                particles=int(
+                    self.particles_edit.text()
+                ),
+
+                q_over_m=float(
+                    self.q_over_m_edit.text()
+                ),
+
+                dt=float(
+                    self.dt_edit.text()
+                ),
+
+                n_steps=int(
+                    self.steps_edit.text()
+                ),
+
+                modules=self.modules.copy()
+            )
+
+            config.validate()
+
+            print(
+                "\nSimulation configuration valid:"
+            )
+
+            print(config)
+
+            QMessageBox.information(
+                self,
+                "Success",
+                "SimulationConfig created successfully."
+            )
+
+            return config
+
+        except Exception as error:
+
+            QMessageBox.critical(
+                self,
+                "Configuration Error",
+                str(error)
+            )
+
+            return None
