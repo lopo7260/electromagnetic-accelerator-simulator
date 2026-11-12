@@ -448,3 +448,32 @@ class ConfigurationTab(QWidget):
             )
 
             return None
+    def run_simulation(self):
+
+        try:
+
+            config = (
+            self.build_simulation_config()
+            )
+
+            print()
+
+            print("Simulation Config")
+
+            print(config)
+
+            print()
+
+            print("Modules")
+
+            for module in config.modules:
+
+                print(module)
+
+        except Exception as error:
+
+            QMessageBox.critical(
+                self,
+                "Simulation Error",
+                str(error)
+        )
