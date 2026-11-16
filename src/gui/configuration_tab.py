@@ -490,6 +490,11 @@ class ConfigurationTab(QWidget):
             print("simulation completed successfully.")
             print(engine.history.get_trajectories().shape)
             self.last_history = engine.history
+            if hasattr(self, "analysis_tab"):
+
+                self.analysis_tab.set_history(
+                    engine.history
+                )
 
         except Exception as error:
 
