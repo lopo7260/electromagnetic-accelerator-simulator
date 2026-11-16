@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 from graphics.plot import plot_trajectory_projections
 
 beam = Beam.gaussian_beam(
-    n_particles=1,
+    n_particles=100,
     position_mean=(0, 0, 0.5),
     velocity_mean=(0, 0, 5),
     q_over_m=1

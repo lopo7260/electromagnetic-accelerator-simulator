@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
 
 from config.module_config import ModuleConfig
 from config.simulation_config import SimulationConfig
+from simulation.simulation_builder import SimulationBuilder
 
 
 class ConfigurationTab(QWidget):
@@ -61,7 +62,7 @@ class ConfigurationTab(QWidget):
         )
 
         self.run_button.clicked.connect(
-            self.build_simulation_config
+            self.run_simulation
         )
 
         editors = [
@@ -448,32 +449,48 @@ class ConfigurationTab(QWidget):
             )
 
             return None
-    def run_simulation(self):
 
+            
+    def run_simulation(self):
+        print("1")
         try:
 
-            config = (
-            self.build_simulation_config()
+            config = self.build_simulation_config()
+            print("2")
+            engine = SimulationBuilder.build(
+                config
+            )
+            print("3")
+            print()
+
+            print("Engine created")
+
+            print(engine)
+
+            print()
+
+            print("Modules:")
+
+            for module in engine.modules:
+
+                print(module.name)
+
+            print()
+
+            print("Particles:")
+
+            print(
+                engine.beam.n_particles
             )
 
-            print()
-
-            print("Simulation Config")
-
-            print(config)
-
-            print()
-
-            print("Modules")
-
-            for module in config.modules:
-
-                print(module)
+            engine.run(
+                n_steps=config.n_steps,
+                dt=config.dt
+            )
+            print("simulation completed successfully.")
+            print(engine.history.get_trajectories().shape)
+            self.last_history = engine.history
 
         except Exception as error:
 
-            QMessageBox.critical(
-                self,
-                "Simulation Error",
-                str(error)
-        )
+            print(error)
