@@ -1,25 +1,25 @@
-print("1")
+print("program started")
 
 from gui.main_window import MainWindow
 
-print("2")
+print("imported main window")
 
 from PySide6.QtWidgets import QApplication
 
-print("3")
+print("imported QApplication")
 
 import sys
 
 app = QApplication(sys.argv)
 
-print("4")
+print("app created")
 
 window = MainWindow()
 
-print("5")
+print("window created")
 
 window.show()
 
-print("6")
+print("window shown")
 
 sys.exit(app.exec())

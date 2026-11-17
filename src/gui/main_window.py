@@ -9,22 +9,10 @@ from PySide6.QtWidgets import (
 
 from gui.configuration_tab import ConfigurationTab
 from gui.analysis_tab import AnalysisTab
-
+from gui.animation_tab import AnimationTab
 import sys
 
-
-class AnimationTab(QWidget):
-
-    def __init__(self):
-        super().__init__()
-
-        layout = QVBoxLayout()
-
-        layout.addWidget(
-            QLabel("Animation Tab")
-        )
-
-        self.setLayout(layout)
+from simulation import engine
 
 
 class MainWindow(QMainWindow):
@@ -56,7 +44,9 @@ class MainWindow(QMainWindow):
         self.configuration_tab.analysis_tab = (
             self.analysis_tab
         )
-
+        self.configuration_tab.animation_tab = (
+            self.animation_tab
+        )
         self.tabs.addTab(
             self.configuration_tab,
             "Configuration"

@@ -47,17 +47,6 @@ class AnalysisTab(QWidget):
         layout.addWidget(
             self.plot_selector
         )
-
-        self.figure = Figure()
-
-        self.canvas = FigureCanvasQTAgg(
-            self.figure
-        )
-
-        layout.addWidget(
-            self.canvas
-        )
-
         self.refresh_button = QPushButton(
             "Refresh"
         )
@@ -71,6 +60,18 @@ class AnalysisTab(QWidget):
         self.refresh_button.clicked.connect(
             self.refresh_plot
         )
+
+        self.figure = Figure()
+
+        self.canvas = FigureCanvasQTAgg(
+            self.figure
+        )
+
+        layout.addWidget(
+            self.canvas
+        )
+
+
 
     def set_history(self, history):
 

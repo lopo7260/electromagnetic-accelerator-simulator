@@ -7,11 +7,13 @@ from PySide6.QtWidgets import (
     QPushButton,
     QLineEdit,
     QGroupBox,
-    QMessageBox
+    QMessageBox,
+    QTextEdit
 )
 
 from config.module_config import ModuleConfig
 from config.simulation_config import SimulationConfig
+from simulation import engine
 from simulation.simulation_builder import SimulationBuilder
 
 
@@ -121,6 +123,10 @@ class ConfigurationTab(QWidget):
 
     def build_parameter_panel(self):
 
+        container = QWidget()
+
+        layout = QVBoxLayout()
+
         box = QGroupBox(
             "Module Parameters"
         )
@@ -140,7 +146,10 @@ class ConfigurationTab(QWidget):
         self.by_edit = QLineEdit()
         self.bz_edit = QLineEdit()
 
-        form.addRow("Name", self.name_edit)
+        form.addRow(
+            "Name",
+            self.name_edit
+        )
 
         form.addRow(
             "z min",
@@ -184,7 +193,15 @@ class ConfigurationTab(QWidget):
 
         box.setLayout(form)
 
-        return box
+        layout.addWidget(box)
+
+        layout.addWidget(
+            self.build_help_panel()
+        )
+
+        container.setLayout(layout)
+
+        return container
 
     def build_simulation_panel(self):
 
@@ -495,7 +512,78 @@ class ConfigurationTab(QWidget):
                 self.analysis_tab.set_history(
                     engine.history
                 )
+            if hasattr(self, "animation_tab"):
+
+                self.animation_tab.set_history(
+                    engine.history
+                )
 
         except Exception as error:
 
             print(error)
+    def build_help_panel(self):
+
+        box = QGroupBox(
+            "Formula Syntax Guide"
+        )
+
+        layout = QVBoxLayout()
+
+        help_text = QTextEdit()
+
+        help_text.setReadOnly(True)
+
+        help_text.setPlainText(
+            """
+    SUPPORTED VARIABLES
+    -----------------------------------------------------------------------------------
+    x : X position    y : Y position    z : Z position    t : Simulation time
+
+    SUPPORTED CONSTANTS
+    -----------------------------------------------------------------------------------
+    pi : 3.141592...        E  : 2.718281...
+
+    SUPPORTED FUNCTIONS
+    -----------------------------------------------------------------------------------
+    sin()       cos()       tan()
+    exp()       sqrt()      abs()
+    COMMON OPERATORS
+    -----------------------------------------------------------------------------------
+    +   Addition        -   Subtraction
+    *   Multiplication  /   Division
+    **  Power
+
+    EXAMPLES
+    -----------------------------------------------------------------------------------
+
+    Uniform field:              100
+
+    Oscillating field:          100*sin(pi*z)
+
+    Time dependent field:       100*cos(t)
+
+    Gaussian profile:           exp(-z**2)
+
+    Radial profile:             sqrt(x**2 + y**2)
+
+    Exponential decay:          E**(-z)
+
+    IMPORTANT
+    -----------------------------------------------------------------------------------
+    Use ** for powers.
+
+    Correct:
+    z**2
+
+    Wrong:
+    z^2
+    """
+        )
+
+        layout.addWidget(
+            help_text
+        )
+
+        box.setLayout(layout)
+
+        return box
