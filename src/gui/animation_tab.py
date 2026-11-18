@@ -174,15 +174,15 @@ class AnimationTab(QWidget):
 
         self.current_frame = 0
 
-        print(
-            "Original:",
-            trajectories.shape
-        )
-
-        print(
-            "Displayed:",
-            self.displayed_frames.shape
-        )
+#         print(
+#             "Original:",
+#             trajectories.shape
+#         )
+#
+#         print(
+#             "Displayed:",
+#             self.displayed_frames.shape
+#         )
 
         self.draw_first_frame()
         self.frame_indices = frame_indices
@@ -231,7 +231,7 @@ class AnimationTab(QWidget):
     def update_frame(self):
 
         if self.displayed_frames is None:
-            print("No trajectories available for animation.")
+            # print("No trajectories available for animation.")
             return
 
         self.current_frame += 1
@@ -241,7 +241,7 @@ class AnimationTab(QWidget):
         ):
 
             self.timer.stop()
-            print("Animation finished.")
+            # print("Animation finished.")
             return
 
         frame = self.get_selected_frame()
@@ -262,15 +262,15 @@ class AnimationTab(QWidget):
             f"Simulated time: "
             f"{simulated_time:.3f} s"
         )
-        print(
-            f"Frame {self.current_frame}: "
-            f"Simulated time: {simulated_time:.3f} s"
-        )
+#         print(
+#             f"Frame {self.current_frame}: "
+#             f"Simulated time: {simulated_time:.3f} s"
+#         )
         self.canvas.draw_idle()
     def play_animation(self):
 
         if self.history is None:
-            print("No history available for animation.")
+            # print("No history available for animation.")
             return
 
         self.timer.start(33)

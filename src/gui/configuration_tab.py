@@ -443,11 +443,11 @@ class ConfigurationTab(QWidget):
 
             config.validate()
 
-            print(
-                "\nSimulation configuration valid:"
-            )
-
-            print(config)
+            # print(
+            #     "\nSimulation configuration valid:"
+            # )
+            #
+            # print(config)
 
             QMessageBox.information(
                 self,
@@ -469,43 +469,31 @@ class ConfigurationTab(QWidget):
 
             
     def run_simulation(self):
-        print("1")
+        # print("1")
         try:
 
             config = self.build_simulation_config()
-            print("2")
+            # print("2")
             engine = SimulationBuilder.build(
                 config
             )
-            print("3")
-            print()
-
-            print("Engine created")
-
-            print(engine)
-
-            print()
-
-            print("Modules:")
-
-            for module in engine.modules:
-
-                print(module.name)
-
-            print()
-
-            print("Particles:")
-
-            print(
-                engine.beam.n_particles
-            )
+            # print("3")
+            # print()
+            #
+            # print("Engine created")
+            #
+            # print(engine)
+            #
+            # print()
+            #
+            # print("Modules:")
 
             engine.run(
                 n_steps=config.n_steps,
                 dt=config.dt
             )
-            print("simulation completed successfully.")
-            print(engine.history.get_trajectories().shape)
+            # print("simulation completed successfully.")
+            # print(engine.history.get_trajectories().shape)
             self.last_history = engine.history
             if hasattr(self, "analysis_tab"):
 
@@ -518,9 +506,9 @@ class ConfigurationTab(QWidget):
                     engine.history
                 )
 
-        except Exception as error:
+        except Exception:
 
-            print(error)
+            pass
     def build_help_panel(self):
 
         box = QGroupBox(

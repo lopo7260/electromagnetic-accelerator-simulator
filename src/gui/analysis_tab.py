@@ -76,7 +76,7 @@ class AnalysisTab(QWidget):
     def set_history(self, history):
 
         self.history = history
-        print("History set in AnalysisTab")
+#         print("History set in AnalysisTab")
             
     def refresh_plot(self):
 
